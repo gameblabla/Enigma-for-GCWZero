@@ -37,7 +37,9 @@
 #include <ios>
 #include <iostream>
 #include <fstream>
+#ifdef HAVE_CURL
 #include <curl/curl.h>
+#endif
 
 using namespace enigma;
 using namespace ecl;
@@ -386,31 +388,44 @@ bool enigma::Copyfile(std::string fromPath, std::string toPath) {
     return !ofs.fail();
 }
 
+	#ifdef HAVE_CURL
     CURL *easycurl;
+    #endif
     
     bool enigma::InitCurl() {
+		#ifdef HAVE_CURL
         if (curl_global_init(CURL_GLOBAL_ALL) != 0)
             return false;
         
         easycurl = curl_easy_init();
         return easycurl != NULL;
+        #else
+		return NULL;
+        #endif
     }
     
     void enigma::ShutdownCurl() {
+		#ifdef HAVE_CURL
         curl_easy_cleanup(easycurl);
         curl_global_cleanup();
+        #endif
     }
     
     size_t curl_writefunction(void *src, size_t size, size_t nmemb, void *dataptr) {
+		#ifdef HAVE_CURL
         ByteVec *dest = (ByteVec *)dataptr;
         size_t oldlen = dest->size();
         dest->resize(oldlen + size * nmemb);
         std::memcpy(&(*dest)[oldlen], src, size * nmemb);
 //        Log << "curl write " << size * nmemb << " new size " << dest->size() << "\n";
         return size * nmemb;
+        #else
+        return 0;
+        #endif
     }
     
     void enigma::Downloadfile(std::string url, ByteVec &dst) {
+		#ifdef HAVE_CURL
         ASSERT(!Robinson, XLevelLoading,  ("Robinson rejects load of '" + url + "'").c_str());
         ASSERT(curl_easy_setopt(easycurl, CURLOPT_URL, url.c_str()) == CURLE_OK, XLevelLoading, 
                 ("Curl url error on '" + url + "'").c_str());
@@ -420,4 +435,5 @@ bool enigma::Copyfile(std::string fromPath, std::string toPath) {
                 ("Curl data set error on '" + url + "'").c_str());
         ASSERT(curl_easy_perform(easycurl) == CURLE_OK, XLevelLoading,
                 ("Curl download error on '" + url + "'").c_str());
+		#endif
     }

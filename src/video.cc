@@ -42,6 +42,10 @@
 #include <sstream>
 #include "config.h"
 
+#ifndef SDL_TRIPLEBUF
+#define SDL_TRIPLEBUF SDL_DOUBLEBUF
+#endif
+
 #define SCREEN ecl::Screen::get_instance()
 
 using namespace std;

@@ -442,7 +442,7 @@ static int llex (LexState *ls, SemInfo *seminfo) {
   }
 }
 
-#include "lexerproxy.c"
+#include "lexerproxy_c.h"
 
 void luaX_next (LexState *ls) {
   ls->lastline = ls->linenumber;

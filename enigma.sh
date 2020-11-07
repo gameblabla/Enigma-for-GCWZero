@@ -1,5 +1,5 @@
 #!/bin/sh
-ENIGMA=./src/enigma
+ENIGMA=./enigma.elf
 if test -e $ENIGMA; then
     $ENIGMA --data $(pwd)/data $*
 else

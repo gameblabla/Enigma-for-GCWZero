@@ -477,11 +477,13 @@ void Application::init(int argc, char **argv)
     lua::DoSubfolderfile (L, "soundsets", "soundset.lua");
 
     // ----- Initialize TCP network layer
+    #ifdef HAVE_CURL
     if (!InitCurl()) {
         fprintf (stderr, "An error occurred while initializing Curl.\n");
         exit (1);
     }
-
+    #endif
+    
     // ----- Initialize UDP network layer
     if (enet_initialize() != 0) {
         fprintf (stderr, "An error occurred while initializing ENet.\n");

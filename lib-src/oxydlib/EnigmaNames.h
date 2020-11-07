@@ -20,6 +20,8 @@
 #ifndef ENIGMANAMES_H
 #define ENIGMANAMES_H
 
+#include "OxydVersion.h"
+
 namespace oxyd { // "faked" namespace - is not part of oxyd namespace in enigma itself
     extern const char *oxyd1_item_map[];
     extern const char *oxyd1_floor_map[];

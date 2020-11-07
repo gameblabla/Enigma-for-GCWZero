@@ -1,7 +1,7 @@
 PRGNAME     = enigma.elf
-CC			= gcc
-CXX			= g++
-STRIP		= strip
+CC			= /opt/rs97-toolchain/bin/mipsel-linux-gcc
+CXX			= /opt/rs97-toolchain/bin/mipsel-linux-g++
+STRIP		= /opt/rs97-toolchain/bin/mipsel-linux-strip
 
 
 SRCDIR		= ./src ./src/actors ./src/floors ./src/gui ./src/items ./src/lev ./src/others ./src/stones
@@ -17,7 +17,8 @@ OBJ_CP		= $(notdir $(patsubst %.cpp, %.o, $(SRC_CP)))
 OBJ_CP2		= $(notdir $(patsubst %.cc, %.o, $(SRC_CP2)))
 OBJS		= $(OBJ_C) $(OBJ_CP) $(OBJ_CP2)
 
-CFLAGS		= -O0 -g3 -I/usr/include/SDL -DHAS_SOCKLEN_T -DHAVE_STD_IOSTREAM -DUSE_STD_IOSTREAM
+CFLAGS		= -Ofast -fdata-sections -ffunction-sections -mno-fp-exceptions -mno-check-zero-division -mframe-header-opt -fno-common -mxgot -mips32 -mno-mips16 -fno-PIC -mno-abicalls -flto
+CFLAGS		+= $(shell /opt/rs97-toolchain/mipsel-buildroot-linux-musl/sysroot/usr/bin/sdl-config --cflags) -DHAS_SOCKLEN_T -DHAVE_STD_IOSTREAM -DUSE_STD_IOSTREAM
 CFLAGS		+= -Ilib-src/zipios++ -I./lib-src/zipios++/zipios++ -Ilib-src/enet/include -Ilib-src/enigma-core -Ilib-src/lua -Ilib-src/oxydlib
 CFLAGS		+= -I./src -I./src/actors -I./src/floors -I./src/gui -I./src/items -I./src/lev -I./src/others -I./src/stones -Ilib-src/zipios++ -Ilib-src
 
@@ -29,7 +30,7 @@ CFLAGS		+= -fprofile-use
 endif
 
 CXXFLAGS	= $(CFLAGS) -std=gnu++11
-LDFLAGS     = -lc -lgcc -lstdc++ -lrt -ldl -lm -lSDL -lasound -lpthread -ldrm -ludev -lpng -lz -lxerces-c -lcurl -lSDL_image -lSDL_ttf -lfreetype -lSDL_mixer
+LDFLAGS     = -lc -lgcc -lstdc++ -lrt -ldl -lm $(shell /opt/rs97-toolchain/mipsel-buildroot-linux-musl/sysroot/usr/bin/sdl-config --libs) -lpthread  -lpng -lz -lxerces-c -licuio -licuuc -licui18n -licudata -lbz2 -lSDL_image -ljpeg -lSDL_ttf -lfreetype -lSDL_mixer -lmikmod -lmpg123 -lvorbisidec -logg -Wl,--as-needed -Wl,--gc-sections -flto -s
 
 ifeq ($(PROFILE), YES)
 LDFLAGS 	+= -lgcov
@@ -50,3 +51,4 @@ $(OBJ_CP2) : %.o : %.cc
 
 clean:
 	rm -f $(PRGNAME) *.o
+
