@@ -619,8 +619,11 @@ void Client::on_keydown(SDL_Event &e)
                 show_menu(true);
             }
             break;
-        /*case SDLK_LEFT:   set_mousespeed(options::GetMouseSpeed() - 1); break;
-        case SDLK_RIGHT:  set_mousespeed(options::GetMouseSpeed() + 1); break;*/
+        /* Analog controls rely on this */
+        #ifndef DPAD_CONTROLS
+        case SDLK_LEFT:   set_mousespeed(options::GetMouseSpeed() - 1); break;
+        case SDLK_RIGHT:  set_mousespeed(options::GetMouseSpeed() + 1); break;
+        #endif
         case SDLK_TAB:    rotate_inventory(+1); break;
         case SDLK_F1:     show_help(); break;
         case SDLK_F2:
