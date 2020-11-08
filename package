@@ -22,7 +22,7 @@ esac
 print '[Desktop Entry]
 Type=Application
 Name=Enigma
-Comment=Puzzle game
+Comment=Port by Gameblabla
 Exec=enigma.elf
 Icon=icon
 Terminal=false

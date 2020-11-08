@@ -17,7 +17,7 @@ OBJ_CP		= $(notdir $(patsubst %.cpp, %.o, $(SRC_CP)))
 OBJ_CP2		= $(notdir $(patsubst %.cc, %.o, $(SRC_CP2)))
 OBJS		= $(OBJ_C) $(OBJ_CP) $(OBJ_CP2)
 
-CFLAGS		= -O0 -g3 -I/usr/include/SDL -DHAS_SOCKLEN_T -DHAVE_STD_IOSTREAM -DUSE_STD_IOSTREAM
+CFLAGS		= -O0 -g3 -I/usr/include/SDL -DHAS_SOCKLEN_T -DHAVE_STD_IOSTREAM -DUSE_STD_IOSTREAM -DDPAD_CONTROLS
 CFLAGS		+= -Ilib-src/zipios++ -I./lib-src/zipios++/zipios++ -Ilib-src/enet/include -Ilib-src/enigma-core -Ilib-src/lua -Ilib-src/oxydlib
 CFLAGS		+= -I./src -I./src/actors -I./src/floors -I./src/gui -I./src/items -I./src/lev -I./src/others -I./src/stones -Ilib-src/zipios++ -Ilib-src
 

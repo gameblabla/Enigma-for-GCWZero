@@ -277,6 +277,7 @@ void MouseCursor::set_image (ecl::Surface *s, int hx, int hy) {
 }
 
 void MouseCursor::draw () {
+	#ifdef NOMOUSE_CURSOR
     if (visible > 0) {
         grab_bg();
 
@@ -286,13 +287,16 @@ void MouseCursor::draw () {
 
         changedp = false;
     }
+	#endif
 }
 
 void MouseCursor::redraw () {
+	#ifdef NOMOUSE_CURSOR
     if (visible > 0 && changedp) {
         restore_bg ();
         draw();
     }
+    #endif
 }
 
 void MouseCursor::move(int newx, int newy) {
@@ -302,19 +306,23 @@ void MouseCursor::move(int newx, int newy) {
 }
 
 void MouseCursor::show () {
+	#ifdef NOMOUSE_CURSOR
     if (++visible == 1) {
         init_bg();
         changedp=true;
     }
+    #endif
 }
 
 void MouseCursor::hide () {
+	#ifdef NOMOUSE_CURSOR
     if (--visible == 0) {
         changedp = true;
         restore_bg();
         delete background;
         background=0;
     }
+    #endif
 }
 
 Rect MouseCursor::get_rect() const {

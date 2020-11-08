@@ -208,6 +208,7 @@ void Client::network_stop ()
 void Client::handle_events()
 {
     SDL_Event e;
+     Uint8 *keystate = SDL_GetKeyState(NULL);
 
     //senquack: added joystick support
     int joyx = 0, joyy = 0;
@@ -276,6 +277,37 @@ void Client::handle_events()
                    V2 (fjoyx * analog_speed * speed_scale, fjoyy * analog_speed * speed_scale));
        }
     }
+    
+    /* Gameblabla */
+    #ifdef DPAD_CONTROLS
+		joyy = 0;
+		joyx = 0;
+		analog_speed = (double)options::GetAnalogSpeed() * 5.0;
+		analog_deadzone = options::GetAnalogDeadzone() * 500;
+		if (keystate[SDLK_UP])
+		{
+			joyy = -32767.0;
+		}
+		else if (keystate[SDLK_DOWN])
+		{
+			joyy = 32767.0;
+		}
+		if (keystate[SDLK_LEFT])
+		{
+			joyx = -32767.0;
+		}
+		else if (keystate[SDLK_RIGHT])
+		{
+			joyx = 32767.0;
+		}
+		
+       if (abs(joyx) > analog_deadzone || abs(joyy) > analog_deadzone) {
+             fjoyx = (double)joyx / 32767.0;
+             fjoyy = (double)joyy / 32767.0;
+             server::Msg_MouseForce (
+                   V2 (fjoyx * analog_speed * speed_scale, fjoyy * analog_speed * speed_scale));
+       }
+    #endif
 
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
@@ -587,8 +619,8 @@ void Client::on_keydown(SDL_Event &e)
                 show_menu(true);
             }
             break;
-        case SDLK_LEFT:   set_mousespeed(options::GetMouseSpeed() - 1); break;
-        case SDLK_RIGHT:  set_mousespeed(options::GetMouseSpeed() + 1); break;
+        /*case SDLK_LEFT:   set_mousespeed(options::GetMouseSpeed() - 1); break;
+        case SDLK_RIGHT:  set_mousespeed(options::GetMouseSpeed() + 1); break;*/
         case SDLK_TAB:    rotate_inventory(+1); break;
         case SDLK_F1:     show_help(); break;
         case SDLK_F2:
